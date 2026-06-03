@@ -132,4 +132,48 @@
 
       </div>
 
+       <!-- 7-DAY FORECAST -->
+      <div class="section-header">
+        <span class="section-title">7-Day Forecast</span>
+        <div class="section-line"></div>
+      </div>
+      <div class="forecast-row" id="forecastRow"></div>
+
+      <!-- BOTTOM ROW -->
+      <div class="section-header">
+        <span class="section-title">Hourly Temperature</span>
+        <div class="section-line"></div>
+      </div>
+      <div class="cards-bottom">
+
+        <!-- Hourly Chart -->
+        <div class="card card-hourly">
+          <div class="card-label">Next 24 Hours</div>
+          <div class="chart-wrap">
+            <svg id="hourlySvg" viewBox="0 0 700 130" preserveAspectRatio="none"></svg>
+          </div>
+        </div>
+
+        <!-- Extra Details -->
+        <div class="card card-details">
+          <div class="card-label">More Details</div>
+          <div id="detailList" class="detail-list"></div>
+        </div>
+
+      </div>
+
+    </main>
+
+    <!-- ======= FOOTER ======= -->
+    <footer class="footer">
+      <span>Powered by <a href="https://weather-ai.co" target="_blank">WeatherAI</a></span>
+      <span id="lastUpdated"></span>
+    </footer>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
+
       
