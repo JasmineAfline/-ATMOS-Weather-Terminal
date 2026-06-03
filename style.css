@@ -353,7 +353,7 @@ body {
   width: 140px; height: 140px;
   border-radius: 50%;
   pointer-events: none;
-  transition: background 1s ease;
+  transition: background-color 1s ease;
 }
 
 
