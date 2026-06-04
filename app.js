@@ -1,22 +1,16 @@
-/* =============================================
-   ATMOS — app.js
-   Full Application Logic
-   ============================================= */
-
-// ── Config ──────────────────────────────────
 const API_BASE   = 'https://api.weather-ai.co';
 let API_KEY      = '';
 let currentUnits = 'metric';
 let lastCity     = '';
 
-// ── On Page Load ────────────────────────────
+
 window.addEventListener('DOMContentLoaded', () => {
   startClock();
   loadApiKey();
   bindEvents();
 });
 
-// ── Clock ────────────────────────────────────
+
 function startClock() {
   function tick() {
     const el = document.getElementById('lastUpdated');
@@ -171,13 +165,11 @@ async function fetchWeather(city) {
     }
 
     const url =
-      `${API_BASE}/v1/weather` +
+      `/.netlify/functions/weather` +
       `?lat=${geo.lat}&lon=${geo.lon}` +
       `&days=7&ai=true&units=${currentUnits}`;
 
-    const res = await fetch(url, {
-      headers: { Authorization: `Bearer ${API_KEY}` }
-    });
+    const res = await fetch(url);
 
     if (!res.ok) {
       const body = await res.json().catch(() => ({}));
