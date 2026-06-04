@@ -26,7 +26,7 @@ function startClock() {
   setInterval(tick, 1000);
 }
 
-// ── Event Bindings ───────────────────────────
+
 function bindEvents() {
   document.getElementById('searchBtn').addEventListener('click', search);
   document.getElementById('cityInput').addEventListener('keydown', e => {
@@ -34,35 +34,42 @@ function bindEvents() {
   });
 }
 
-// ── API Key ──────────────────────────────────
 function loadApiKey() {
   const saved = localStorage.getItem('atmos_wai_key');
-  if (saved) {
+  if (saved && saved.startsWith('wai_')) {
     API_KEY = saved;
+    document.getElementById('keyBanner').classList.add('hidden');
     loadCity('Nairobi');
   } else {
-    promptApiKey();
+    showKeyBanner();
   }
 }
 
-function promptApiKey() {
-  const key = prompt(
-    'Welcome to ATMOS\n\n' +
-    'Enter your WeatherAI API key to continue.\n' +
-    'Get a free key at: https://weather-ai.co\n\n' +
-    'Your key starts with "wai_"'
-  );
-  if (!key) return;
-  if (!key.startsWith('wai_')) {
-    alert('Invalid key — must start with wai_');
-    return promptApiKey();
+function showKeyBanner() {
+  document.getElementById('keyBanner').classList.remove('hidden');
+}
+
+function saveKeyFromBanner() {
+  const key = document.getElementById('keyInput').value.trim();
+  if (!key) {
+    alert('Please enter your API key.');
+    return;
   }
-  API_KEY = key.trim();
+  if (!key.startsWith('wai_')) {
+    alert('Invalid key — must start with wai_\nGet your key at weather-ai.co');
+    return;
+  }
+  API_KEY = key;
   localStorage.setItem('atmos_wai_key', API_KEY);
+  document.getElementById('keyBanner').classList.add('hidden');
   loadCity('Nairobi');
 }
 
-// ── Units Toggle ─────────────────────────────
+function promptApiKey() {
+  showKeyBanner();
+}
+
+
 function setUnits(u) {
   currentUnits = u;
   document.getElementById('btnC').classList.toggle('active', u === 'metric');
@@ -70,7 +77,7 @@ function setUnits(u) {
   if (lastCity) loadCity(lastCity);
 }
 
-// ── Search ───────────────────────────────────
+
 function search() {
   const city = document.getElementById('cityInput').value.trim();
   if (!city) return;
