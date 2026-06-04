@@ -157,12 +157,7 @@ async function fetchWeather(city) {
     const geo     = await geocode(city);
     const isLocal = location.hostname === '127.0.0.1' || location.hostname === 'localhost';
 
-    if (isLocal) {
-      console.info('ℹ Local mode — using mock data. Real API fires on deployment.');
-      await new Promise(r => setTimeout(r, 800));
-      renderAll(MOCK_DATA, geo);
-      return;
-    }
+    
 
     const url =
       `/.netlify/functions/weather` +
@@ -177,6 +172,7 @@ async function fetchWeather(city) {
     }
 
     const data = await res.json();
+    console.log('FULL API RESPONSE:', JSON.stringify(data, null, 2));
     renderAll(data, geo);
 
   } catch (err) {
