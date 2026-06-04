@@ -56,7 +56,7 @@ The application transforms raw weather data into a user-friendly dashboard exper
 ## Running Locally
 
 ```bash
-git clone <your-repository-url>
+git clone <https://github.com/JasmineAfline/-ATMOS-Weather-Terminal>
 cd atmos
 ```
 
