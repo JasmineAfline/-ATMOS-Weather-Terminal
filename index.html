@@ -1,186 +1,198 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="en" data-theme="dark">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ATMOS — Weather Intelligence</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&display=swap"
-        rel="stylesheet" />
-    <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ATMOS — Weather Intelligence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
 
-    <div class="app-shell">
+  <div class="app-shell">
 
+    <!-- HEADER -->
+    <header class="header">
+      <div class="logo">ATM<span>O</span>S</div>
 
-        <header class="header">
-            <div class="logo">ATM<span>O</span>S</div>
+      <div class="search-bar">
+        <span class="search-icon">⌕</span>
+        <input
+          type="text"
+          id="cityInput"
+          class="search-input"
+          placeholder="Search city — e.g. Nairobi, Tokyo, London"
+          autocomplete="off"
+        />
+        <button id="searchBtn" class="search-btn">Search</button>
+      </div>
 
-            <div class="search-bar">
-                <span class="search-icon">⌕</span>
-                <input type="text" id="cityInput" class="search-input"
-                    placeholder="Search city — e.g. Nairobi, Tokyo, London" autocomplete="off" />
-                <button id="searchBtn" class="search-btn">Search</button>
-            </div>
-
-            <div class="header-right">
-                <div class="unit-toggle">
-                    <button class="unit-btn active" id="btnC" onclick="setUnits('metric')">°C</button>
-                    <button class="unit-btn" id="btnF" onclick="setUnits('imperial')">°F</button>
-                </div>
-            </div>
-        </header>
-
-
-        <div id="keyBanner" class="key-banner hidden">
-            <span class="key-banner-text">🔑 Enter your WeatherAI API key to load live data</span>
-            <div class="key-input-wrap">
-                <input type="text" id="keyInput" class="key-input" placeholder="wai_xxxxxxxxxxxxxxxx"
-                    autocomplete="off" />
-                <button onclick="saveKeyFromBanner()" class="key-save-btn">Save & Continue</button>
-            </div>
+      <div class="header-right">
+        <button class="gps-btn" onclick="detectLocation()" title="Detect my location">
+          📍
+        </button>
+        <div class="unit-toggle">
+          <button class="unit-btn active" id="btnC" onclick="setUnits('metric')">°C</button>
+          <button class="unit-btn" id="btnF" onclick="setUnits('imperial')">°F</button>
         </div>
+        <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" title="Toggle theme">
+          🌙
+        </button>
+      </div>
+    </header>
 
-        <div class="quick-cities">
-            <span class="quick-label">Quick:</span>
-            <button class="qc-btn" onclick="loadCity('Nairobi')">Nairobi</button>
-            <button class="qc-btn" onclick="loadCity('New York')">New York</button>
-            <button class="qc-btn" onclick="loadCity('Tokyo')">Tokyo</button>
-            <button class="qc-btn" onclick="loadCity('London')">London</button>
-            <button class="qc-btn" onclick="loadCity('Lagos')">Lagos</button>
-            <button class="qc-btn" onclick="loadCity('Sydney')">Sydney</button>
-            <button class="qc-btn" onclick="loadCity('Dubai')">Dubai</button>
-        </div>
-
-
-        <div id="stateEmpty" class="state-empty">
-            <div class="empty-icon">🌍</div>
-            <p class="empty-title">Search any city to begin</p>
-            <p class="empty-sub">Real-time weather · 7-day forecast · AI analysis</p>
-        </div>
-
-        <div id="stateLoading" class="state-loading hidden">
-            <div class="loader"></div>
-            <p>Acquiring atmospheric data...</p>
-        </div>
-
-        <div id="stateError" class="state-error hidden">
-            <div class="error-icon">⚠</div>
-            <p id="errorMsg">Something went wrong.</p>
-            <button onclick="clearError()" class="error-retry">Try again</button>
-        </div>
-
-
-        <main id="results" class="results hidden">
-
-
-            <div class="cards-top">
-
-
-                <div class="card card-current">
-                    <div class="card-label">Current Conditions</div>
-                    <div class="current-location">
-                        <span id="rCity" class="current-city">—</span>
-                        <span id="rCountry" class="current-country">—</span>
-                    </div>
-                    <div class="current-temp-row">
-                        <div id="rTemp" class="current-temp">—</div>
-                        <div class="current-unit-sup" id="rUnit">°C</div>
-                    </div>
-                    <div id="rDesc" class="current-desc">—</div>
-                    <div id="rHighLow" class="current-highlow">— / —</div>
-                    <div class="current-glow" id="weatherGlow"></div>
-                </div>
-
-
-                <div class="card card-stats">
-                    <div class="card-label">Atmosphere</div>
-                    <div class="stat-grid">
-                        <div class="stat-box">
-                            <div class="stat-val" id="sFeels">—</div>
-                            <div class="stat-lbl">Feels Like</div>
-                        </div>
-                        <div class="stat-box">
-                            <div class="stat-val highlight-yellow" id="sHumidity">—</div>
-                            <div class="stat-lbl">Humidity</div>
-                        </div>
-                        <div class="stat-box">
-                            <div class="stat-val" id="sWind">—</div>
-                            <div class="stat-lbl">Wind</div>
-                        </div>
-                        <div class="stat-box">
-                            <div class="stat-val highlight-red" id="sUV">—</div>
-                            <div class="stat-lbl">UV Index</div>
-                        </div>
-                        <div class="stat-box">
-                            <div class="stat-val" id="sVis">—</div>
-                            <div class="stat-lbl">Visibility</div>
-                        </div>
-                        <div class="stat-box">
-                            <div class="stat-val highlight-blue" id="sPressure">—</div>
-                            <div class="stat-lbl">Pressure</div>
-                        </div>
-                    </div>
-                </div>
-
-
-                <div class="card card-ai">
-                    <div class="ai-chip">
-                        <span class="ai-pulse"></span>
-                        AI Summary
-                    </div>
-                    <div class="card-label">Gemini Analysis</div>
-                    <p id="aiSummary" class="ai-text">Awaiting data...</p>
-                </div>
-
-            </div>
-
-
-            <div class="section-header">
-                <span class="section-title">7-Day Forecast</span>
-                <div class="section-line"></div>
-            </div>
-            <div class="forecast-row" id="forecastRow"></div>
-
-
-            <div class="section-header">
-                <span class="section-title">Hourly Temperature</span>
-                <div class="section-line"></div>
-            </div>
-            <div class="cards-bottom">
-
-
-                <div class="card card-hourly">
-                    <div class="card-label">Next 24 Hours</div>
-                    <div class="chart-wrap">
-                        <svg id="hourlySvg" viewBox="0 0 700 130" preserveAspectRatio="none"></svg>
-                    </div>
-                </div>
-
-
-                <div class="card card-details">
-                    <div class="card-label">More Details</div>
-                    <div id="detailList" class="detail-list"></div>
-                </div>
-
-            </div>
-
-        </main>
-
-
-        <footer class="footer">
-            <span>Powered by <a href="https://weather-ai.co" target="_blank">WeatherAI</a></span>
-            <span id="lastUpdated"></span>
-        </footer>
-
+    <!-- QUICK CITIES -->
+    <div class="quick-cities">
+      <span class="quick-label">Quick:</span>
+      <button class="qc-btn" onclick="loadCity('Nairobi')">Nairobi</button>
+      <button class="qc-btn" onclick="loadCity('New York')">New York</button>
+      <button class="qc-btn" onclick="loadCity('Tokyo')">Tokyo</button>
+      <button class="qc-btn" onclick="loadCity('London')">London</button>
+      <button class="qc-btn" onclick="loadCity('Lagos')">Lagos</button>
+      <button class="qc-btn" onclick="loadCity('Sydney')">Sydney</button>
+      <button class="qc-btn" onclick="loadCity('Dubai')">Dubai</button>
     </div>
 
-    <script src="app.js"></script>
-</body>
+    <!-- RECENT SEARCHES -->
+    <div id="recentWrap" class="recent-wrap hidden">
+      <span class="quick-label">Recent:</span>
+      <div id="recentList" class="recent-list"></div>
+      <button class="clear-recent" onclick="clearRecent()">Clear</button>
+    </div>
 
+    <!-- STATES -->
+    <div id="stateEmpty" class="state-empty">
+      <div class="empty-icon">🌍</div>
+      <p class="empty-title">Search any city to begin</p>
+      <p class="empty-sub">Real-time weather · 7-day forecast · AI analysis</p>
+    </div>
+
+    <div id="stateLoading" class="state-loading hidden">
+      <div class="skeleton-wrap">
+        <div class="skeleton skeleton-hero"></div>
+        <div class="skeleton-row">
+          <div class="skeleton skeleton-card"></div>
+          <div class="skeleton skeleton-card"></div>
+        </div>
+        <div class="skeleton skeleton-forecast"></div>
+      </div>
+    </div>
+
+    <div id="stateError" class="state-error hidden">
+      <div class="error-icon">⚠</div>
+      <p id="errorMsg">Something went wrong.</p>
+      <button onclick="clearError()" class="error-retry">Try again</button>
+    </div>
+
+    <!-- RESULTS -->
+    <main id="results" class="results hidden">
+
+      <!-- TOP CARDS -->
+      <div class="cards-top">
+
+        <!-- Current -->
+        <div class="card card-current">
+          <div class="card-label">Current Conditions</div>
+          <div class="current-location">
+            <span id="rCity" class="current-city">—</span>
+            <span id="rCountry" class="current-country">—</span>
+          </div>
+          <div class="current-temp-row">
+            <div id="rTemp" class="current-temp">—</div>
+            <div class="current-unit-sup" id="rUnit">°C</div>
+          </div>
+          <div id="rDesc" class="current-desc">—</div>
+          <div id="rHighLow" class="current-highlow">—</div>
+          <div class="current-glow" id="weatherGlow"></div>
+        </div>
+
+        <!-- Stats -->
+        <div class="card card-stats">
+          <div class="card-label">Atmosphere</div>
+          <div class="stat-grid">
+            <div class="stat-box">
+              <div class="stat-val highlight-blue" id="sFeels">—</div>
+              <div class="stat-lbl">Feels Like</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-val highlight-yellow" id="sHumidity">—</div>
+              <div class="stat-lbl">Humidity</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-val" id="sWind">—</div>
+              <div class="stat-lbl">Wind</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-val highlight-red" id="sUV">—</div>
+              <div class="stat-lbl">UV Index</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-val" id="sVis">—</div>
+              <div class="stat-lbl">Visibility</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-val highlight-blue" id="sPressure">—</div>
+              <div class="stat-lbl">Pressure</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- AI -->
+        <div class="card card-ai">
+          <div class="ai-chip">
+            <span class="ai-pulse"></span>
+            AI Summary
+          </div>
+          <div class="card-label">Gemini Analysis</div>
+          <p id="aiSummary" class="ai-text">Awaiting data...</p>
+        </div>
+
+      </div>
+
+      <!-- RECOMMENDATIONS -->
+      <div class="section-header">
+        <span class="section-title">Smart Recommendations</span>
+        <div class="section-line"></div>
+      </div>
+      <div id="recommendationsRow" class="recommendations-row"></div>
+
+      <!-- 7-DAY FORECAST -->
+      <div class="section-header">
+        <span class="section-title">7-Day Forecast</span>
+        <div class="section-line"></div>
+      </div>
+      <div class="forecast-row" id="forecastRow"></div>
+
+      <!-- BOTTOM ROW -->
+      <div class="section-header">
+        <span class="section-title">Hourly Temperature</span>
+        <div class="section-line"></div>
+      </div>
+      <div class="cards-bottom">
+        <div class="card card-hourly">
+          <div class="card-label">Next 24 Hours</div>
+          <div class="chart-wrap">
+            <svg id="hourlySvg" viewBox="0 0 700 130" preserveAspectRatio="none"></svg>
+          </div>
+        </div>
+        <div class="card card-details">
+          <div class="card-label">More Details</div>
+          <div id="detailList" class="detail-list"></div>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <span>Powered by <a href="https://weather-ai.co" target="_blank">WeatherAI</a></span>
+      <span id="lastUpdated"></span>
+    </footer>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
 </html>
