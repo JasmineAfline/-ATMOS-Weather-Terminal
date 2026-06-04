@@ -1,11 +1,6 @@
-/* =============================================
-   ATMOS — app.js  |  Full logic v3
-   ============================================= */
-
 let currentUnits = 'metric';
 let lastCity     = '';
 
-// ── WMO condition codes ───────────────────────
 const WMO = {
   '0':  { text:'Clear Sky',         icon:'☀️'  },
   '1':  { text:'Mainly Clear',      icon:'🌤️'  },
@@ -30,7 +25,7 @@ const WMO = {
 };
 function getCond(code) { return WMO[String(code)] || { text:'Unknown', icon:'🌡️' }; }
 
-// ── Init ──────────────────────────────────────
+
 window.addEventListener('DOMContentLoaded', () => {
   startClock();
   bindEvents();
@@ -41,7 +36,7 @@ window.addEventListener('DOMContentLoaded', () => {
   loadCity('Nairobi');
 });
 
-// ── Clock ─────────────────────────────────────
+
 function startClock() {
   const tick = () => {
     const el = document.getElementById('lastUpdated');
@@ -50,7 +45,7 @@ function startClock() {
   tick(); setInterval(tick, 1000);
 }
 
-// ── Events ────────────────────────────────────
+
 function bindEvents() {
   document.getElementById('searchBtn').addEventListener('click', search);
   document.getElementById('cityInput').addEventListener('keydown', e => {
@@ -58,7 +53,7 @@ function bindEvents() {
   });
 }
 
-// ── Theme ─────────────────────────────────────
+
 function loadTheme() {
   const saved = localStorage.getItem('atmos_theme') || 'dark';
   setTheme(saved);
@@ -73,7 +68,7 @@ function setTheme(t) {
   document.getElementById('themeBtn').textContent = t === 'dark' ? '🌙' : '☀️';
 }
 
-// ── Units ─────────────────────────────────────
+
 function setUnits(u) {
   currentUnits = u;
   document.getElementById('btnC').classList.toggle('active', u === 'metric');
@@ -86,7 +81,7 @@ function dispTemp(c, u) {
   return u ? Math.round(c) : Math.round(toF(c));
 }
 
-// ── Search ────────────────────────────────────
+
 function search() {
   const city = document.getElementById('cityInput').value.trim();
   if (!city) return;
@@ -105,7 +100,7 @@ function loadCity(city) {
 
 function clearError() { showState('empty'); }
 
-// ── Recent Searches ───────────────────────────
+
 function saveRecent(city) {
   let list = getRecent();
   list = [city, ...list.filter(c => c.toLowerCase() !== city.toLowerCase())].slice(0, 5);
@@ -130,7 +125,7 @@ function renderRecent() {
   ).join('');
 }
 
-// ── GPS Location ──────────────────────────────
+
 function detectLocation() {
   if (!navigator.geolocation) {
     alert('Geolocation is not supported by your browser.');
@@ -141,7 +136,7 @@ function detectLocation() {
     async pos => {
       const { latitude: lat, longitude: lon } = pos.coords;
       try {
-        // Reverse geocode to get city name
+       
         const res  = await fetch(
           `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`,
           { headers: { 'Accept-Language': 'en-US,en' } }
@@ -160,7 +155,7 @@ function detectLocation() {
   );
 }
 
-// ── Geocoding ─────────────────────────────────
+
 async function geocode(city) {
   const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(city)}&format=json&limit=1&addressdetails=1`;
   const res  = await fetch(url, { headers: { 'Accept-Language': 'en-US,en' } });
@@ -176,7 +171,7 @@ async function geocode(city) {
   };
 }
 
-// ── Fetch ─────────────────────────────────────
+
 async function fetchWeather(city) {
   showState('loading');
   try {
@@ -198,7 +193,7 @@ async function fetchWeatherByCoords(lat, lon, city, country) {
   } catch (err) { showError(err.message); }
 }
 
-// ── Render All ────────────────────────────────
+
 function renderAll(data, geo) {
   const u = currentUnits === 'metric';
   renderCurrent(data, geo, u);
@@ -211,7 +206,7 @@ function renderAll(data, geo) {
   showState('results');
 }
 
-// ── Current ───────────────────────────────────
+
 function renderCurrent(data, geo, u) {
   const cur  = data.current || {};
   const cond = getCond(cur.condition_code);
@@ -240,18 +235,17 @@ function renderCurrent(data, geo, u) {
     glow.style.background = 'radial-gradient(circle, rgba(148,163,184,0.15) 0%, transparent 70%)';
 }
 
-// ── Stats ─────────────────────────────────────
+
 function renderStats(data, u) {
   const cur = data.current || {};
   document.getElementById('sFeels').textContent    = cur.feels_like  != null ? dispTemp(cur.feels_like, u)  + (u ? '°C' : '°F') : '—';
   document.getElementById('sHumidity').textContent = cur.humidity    != null ? cur.humidity + '%' : '—';
   document.getElementById('sWind').textContent     = cur.wind_speed  != null ? (u ? Math.round(cur.wind_speed) + ' km/h' : Math.round(cur.wind_speed * 0.621) + ' mph') : '—';
   document.getElementById('sUV').textContent       = cur.uv_index    != null ? Math.round(cur.uv_index) : '—';
-  document.getElementById('sVis').textContent      = '—'; // not in current payload
+  document.getElementById('sVis').textContent      = '—'; 
   document.getElementById('sPressure').textContent = cur.pressure    != null ? Math.round(cur.pressure) + ' mb' : '—';
 }
 
-// ── AI Summary ────────────────────────────────
 function renderAI(text) {
   const el = document.getElementById('aiSummary');
   el.textContent = '';
@@ -264,7 +258,7 @@ function renderAI(text) {
   }, 18);
 }
 
-// ── Smart Recommendations ─────────────────────
+
 function renderRecommendations(data, u) {
   const cur  = data.current || {};
   const cond = getCond(cur.condition_code);
@@ -277,43 +271,42 @@ function renderRecommendations(data, u) {
 
   const recs = [];
 
-  // Umbrella
   if (t.includes('rain') || t.includes('drizzle') || t.includes('shower') || rain > 50)
     recs.push({ icon:'🌂', title:'Carry an umbrella', sub:'Rain expected today' });
 
-  // Sunscreen
+  
   if (uv >= 6)
     recs.push({ icon:'🧴', title:'Apply sunscreen', sub:`UV index is high (${Math.round(uv)})` });
   else if (uv >= 3)
     recs.push({ icon:'🕶️', title:'Wear sunglasses', sub:`UV index is moderate (${Math.round(uv)})` });
 
-  // Jacket
+  
   if (temp < 10)
     recs.push({ icon:'🧥', title:'Wear a heavy jacket', sub:`It\'s cold at ${dispTemp(temp, u)}°` });
   else if (temp < 18)
     recs.push({ icon:'🧣', title:'Bring a light jacket', sub:`Cool conditions today` });
 
-  // Wind
+  
   if (wind > 40)
     recs.push({ icon:'💨', title:'Strong winds today', sub:'Secure loose items outside' });
 
-  // Humidity
+ 
   if (hum > 80)
     recs.push({ icon:'💧', title:'High humidity', sub:'Stay hydrated and cool' });
 
-  // Clear sky
+ 
   if (t.includes('clear') || t.includes('sunny'))
     recs.push({ icon:'🌳', title:'Great for outdoors', sub:'Perfect weather to go outside' });
 
-  // Snow
+  
   if (t.includes('snow'))
     recs.push({ icon:'🧤', title:'Bundle up', sub:'Snow conditions — dress warm' });
 
-  // Thunder
+ 
   if (t.includes('thunder'))
     recs.push({ icon:'⚡', title:'Stay indoors', sub:'Thunderstorm warning in effect' });
 
-  // Fallback
+  
   if (!recs.length)
     recs.push({ icon:'✅', title:'All clear today', sub:'Comfortable conditions outside' });
 
@@ -329,7 +322,6 @@ function renderRecommendations(data, u) {
   `).join('');
 }
 
-// ── Forecast ──────────────────────────────────
 function renderForecast(days, u) {
   const row = document.getElementById('forecastRow');
   row.innerHTML = '';
@@ -353,7 +345,7 @@ function renderForecast(days, u) {
   });
 }
 
-// ── Hourly Chart ──────────────────────────────
+
 function renderHourly(hours, u) {
   const svg = document.getElementById('hourlySvg');
   svg.innerHTML = '';
@@ -412,7 +404,7 @@ function renderHourly(hours, u) {
   });
 }
 
-// ── Details ───────────────────────────────────
+
 function renderDetails(data, u) {
   const cur  = data.current   || {};
   const day0 = (data.forecast || [])[0] || {};
@@ -443,7 +435,7 @@ function renderDetails(data, u) {
   `).join('');
 }
 
-// ── Helpers ───────────────────────────────────
+
 function bearingToDir(deg) {
   const dirs = ['N','NE','E','SE','S','SW','W','NW'];
   return dirs[Math.round(deg / 45) % 8];
@@ -457,7 +449,7 @@ function uvCategory(uv) {
   return 'Extreme';
 }
 
-// ── State ─────────────────────────────────────
+
 function showState(state) {
   ['stateEmpty','stateLoading','stateError','results'].forEach(id => {
     document.getElementById(id).classList.add('hidden');

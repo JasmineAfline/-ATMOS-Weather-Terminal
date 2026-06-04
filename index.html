@@ -13,7 +13,7 @@
 
   <div class="app-shell">
 
-    <!-- HEADER -->
+    
     <header class="header">
       <div class="logo">ATM<span>O</span>S</div>
 
@@ -43,7 +43,7 @@
       </div>
     </header>
 
-    <!-- QUICK CITIES -->
+    
     <div class="quick-cities">
       <span class="quick-label">Quick:</span>
       <button class="qc-btn" onclick="loadCity('Nairobi')">Nairobi</button>
@@ -55,14 +55,14 @@
       <button class="qc-btn" onclick="loadCity('Dubai')">Dubai</button>
     </div>
 
-    <!-- RECENT SEARCHES -->
+    
     <div id="recentWrap" class="recent-wrap hidden">
       <span class="quick-label">Recent:</span>
       <div id="recentList" class="recent-list"></div>
       <button class="clear-recent" onclick="clearRecent()">Clear</button>
     </div>
 
-    <!-- STATES -->
+    
     <div id="stateEmpty" class="state-empty">
       <div class="empty-icon">🌍</div>
       <p class="empty-title">Search any city to begin</p>
@@ -86,13 +86,13 @@
       <button onclick="clearError()" class="error-retry">Try again</button>
     </div>
 
-    <!-- RESULTS -->
+   
     <main id="results" class="results hidden">
 
-      <!-- TOP CARDS -->
+     
       <div class="cards-top">
 
-        <!-- Current -->
+       
         <div class="card card-current">
           <div class="card-label">Current Conditions</div>
           <div class="current-location">
@@ -108,7 +108,7 @@
           <div class="current-glow" id="weatherGlow"></div>
         </div>
 
-        <!-- Stats -->
+        
         <div class="card card-stats">
           <div class="card-label">Atmosphere</div>
           <div class="stat-grid">
@@ -139,7 +139,7 @@
           </div>
         </div>
 
-        <!-- AI -->
+        
         <div class="card card-ai">
           <div class="ai-chip">
             <span class="ai-pulse"></span>
@@ -151,21 +151,21 @@
 
       </div>
 
-      <!-- RECOMMENDATIONS -->
+     
       <div class="section-header">
         <span class="section-title">Smart Recommendations</span>
         <div class="section-line"></div>
       </div>
       <div id="recommendationsRow" class="recommendations-row"></div>
 
-      <!-- 7-DAY FORECAST -->
+      
       <div class="section-header">
         <span class="section-title">7-Day Forecast</span>
         <div class="section-line"></div>
       </div>
       <div class="forecast-row" id="forecastRow"></div>
 
-      <!-- BOTTOM ROW -->
+     
       <div class="section-header">
         <span class="section-title">Hourly Temperature</span>
         <div class="section-line"></div>
@@ -185,7 +185,7 @@
 
     </main>
 
-    <!-- FOOTER -->
+    
     <footer class="footer">
       <span>Powered by <a href="https://weather-ai.co" target="_blank">WeatherAI</a></span>
       <span id="lastUpdated"></span>

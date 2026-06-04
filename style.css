@@ -1,11 +1,6 @@
-/* =============================================
-   ATMOS — style.css
-   Full Theme + Layout + Dark/Light Mode
-   ============================================= */
-
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* ── DARK THEME (default) ── */
+
 [data-theme="dark"] {
   --bg:           #090e18;
   --surface:      #0f1621;
@@ -32,7 +27,7 @@
   --card-line3:   linear-gradient(90deg,#a78bfa,#f472b6);
 }
 
-/* ── LIGHT THEME ── */
+
 [data-theme="light"] {
   --bg:           #f0f4f8;
   --surface:      #ffffff;
@@ -163,7 +158,7 @@ body {
 .unit-btn.active { background: var(--blue); color: #fff; font-weight: 600; }
 [data-theme="dark"] .unit-btn.active { color: #000; }
 
-/* ── QUICK CITIES ── */
+
 .quick-cities {
   display: flex; align-items: center; gap: 8px;
   padding: 12px 0; flex-wrap: wrap;
@@ -182,7 +177,7 @@ body {
   background: var(--blue-dim);
 }
 
-/* ── RECENT SEARCHES ── */
+
 .recent-wrap {
   display: flex; align-items: center; gap: 8px;
   padding: 10px 0; flex-wrap: wrap;
@@ -205,7 +200,7 @@ body {
 }
 .clear-recent:hover { color: var(--red); }
 
-/* ── STATES ── */
+
 .hidden { display: none !important; }
 
 .state-empty { text-align: center; padding: 100px 20px; }
@@ -214,7 +209,7 @@ body {
 .empty-title { font-family:'Outfit',sans-serif; font-weight:600; font-size:1.1rem; color:var(--muted2); margin-bottom:6px; }
 .empty-sub { font-size:0.82rem; color:var(--muted); }
 
-/* ── SKELETON LOADING ── */
+
 .skeleton-wrap { padding: 28px 0; display: flex; flex-direction: column; gap: 14px; }
 .skeleton {
   background: var(--card);
@@ -231,7 +226,7 @@ body {
 .skeleton-card   { height: 160px; border-radius: var(--radius-lg); background: var(--card); border: 0.5px solid var(--border); animation: shimmer 1.5s ease-in-out infinite; }
 .skeleton-forecast { height: 120px; }
 
-/* ── ERROR ── */
+
 .state-error { text-align: center; padding: 80px 20px; }
 .error-icon { font-size: 36px; margin-bottom: 12px; }
 #errorMsg { color: var(--red); font-size: 0.9rem; margin-bottom: 16px; }
@@ -243,11 +238,11 @@ body {
 }
 .error-retry:hover { background: rgba(248,113,113,0.1); }
 
-/* ── RESULTS ── */
+
 .results { animation: fadeUp 0.45s ease both; }
 @keyframes fadeUp { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
 
-/* ── CARDS BASE ── */
+
 .card {
   background: var(--card);
   border-radius: var(--radius-lg);
@@ -273,7 +268,7 @@ body {
   text-transform: uppercase; color: var(--muted); margin-bottom: 14px;
 }
 
-/* ── TOP CARDS ── */
+
 .cards-top {
   display: grid; grid-template-columns: 1.1fr 1fr 1fr;
   gap: 14px; margin-top: 24px;
@@ -325,7 +320,7 @@ body {
 .ai-cursor::after { content:'|'; color:var(--green); animation:blink 1s step-end infinite; }
 @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
 
-/* ── RECOMMENDATIONS ── */
+
 .recommendations-row {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
@@ -347,12 +342,11 @@ body {
 .rec-title { font-size: 0.78rem; font-weight: 600; color: var(--white); margin-bottom: 2px; }
 .rec-sub { font-size: 0.7rem; color: var(--muted2); line-height: 1.4; }
 
-/* ── SECTION HEADERS ── */
+
 .section-header { display:flex; align-items:center; gap:12px; margin:24px 0 12px; }
 .section-title { font-family:'Outfit',sans-serif; font-weight:600; font-size:0.78rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted2); white-space:nowrap; }
 .section-line { flex:1; height:0.5px; background:var(--border); }
 
-/* ── FORECAST ── */
 .forecast-row { display:grid; grid-template-columns:repeat(7,1fr); gap:10px; }
 .fc-card {
   background:var(--card); border-radius:var(--radius-md);
@@ -369,7 +363,7 @@ body {
 .fc-lo { font-size:0.72rem; color:var(--muted); margin-top:2px; }
 .fc-rain { font-size:0.62rem; color:var(--blue); margin-top:8px; letter-spacing:0.04em; }
 
-/* ── BOTTOM ROW ── */
+
 .cards-bottom { display:grid; grid-template-columns:2fr 1fr; gap:14px; }
 .chart-wrap { margin-top:10px; width:100%; overflow-x:auto; }
 #hourlySvg { width:100%; min-width:480px; height:130px; display:block; }
@@ -385,7 +379,7 @@ body {
 .detail-lbl { color:var(--muted2); }
 .detail-val { color:var(--white); font-weight:500; }
 
-/* ── FOOTER ── */
+
 .footer {
   display:flex; justify-content:space-between; align-items:center;
   padding:24px 0 0; border-top:0.5px solid var(--border);
