@@ -80,12 +80,18 @@ function search() {
 function loadCity(city) {
   lastCity = city;
   document.getElementById('cityInput').value = city;
+
+ 
+  document.querySelectorAll('.qc-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.textContent.trim().toLowerCase() === city.toLowerCase());
+  });
+
   fetchWeather(city);
 }
 
 function clearError() { showState('empty'); }
 
-// ── Geocoding ────────────────────────────────
+
 async function geocode(city) {
   const url =
     `https://nominatim.openstreetmap.org/search` +
@@ -104,7 +110,7 @@ async function geocode(city) {
   };
 }
 
-// ── Mock Data (localhost only) ───────────────
+
 const MOCK_DATA = {
   location: { name: 'Nairobi', country: 'Kenya' },
   current: {
@@ -141,7 +147,7 @@ const MOCK_DATA = {
   ai_summary: 'Comfortable conditions across Nairobi today with partly cloudy skies. Temperatures peak around 26°C in the afternoon before easing to a pleasant 16°C overnight. A brief rain window is possible mid-week — keep a light jacket handy. Weekend looks clear and warm.'
 };
 
-// ── Main Fetch Flow ──────────────────────────
+
 async function fetchWeather(city) {
   if (!API_KEY) { promptApiKey(); return; }
   showState('loading');
@@ -179,7 +185,7 @@ async function fetchWeather(city) {
   }
 }
 
-// ── Render — Master ──────────────────────────
+
 function renderAll(data, geo) {
   const current  = data.current || {};
   const forecast = data.forecast?.forecastday || [];
@@ -196,7 +202,7 @@ function renderAll(data, geo) {
   showState('results');
 }
 
-// ── Render — Current Card ────────────────────
+
 function renderCurrent(current, geo, u) {
   document.getElementById('rCity').textContent    = geo.city.toUpperCase();
   document.getElementById('rCountry').textContent = geo.country;
@@ -220,7 +226,7 @@ function renderCurrent(current, geo, u) {
   document.getElementById('rHighLow').textContent =
     (hi !== 0 || lo !== 0) ? `H: ${hi}°  L: ${lo}°` : '';
 
-  // Ambient glow colour based on weather
+  
   const glow = document.getElementById('weatherGlow');
   const d    = desc.toLowerCase();
   if (d.includes('sun') || d.includes('clear')) {
@@ -238,7 +244,7 @@ function renderCurrent(current, geo, u) {
   }
 }
 
-// ── Render — Stats Card ──────────────────────
+
 function renderStats(current, u) {
   const feels = u
     ? Math.round(current.feelslike_c ?? 0) + '°C'
@@ -264,7 +270,7 @@ function renderStats(current, u) {
   document.getElementById('sPressure').textContent = pressure;
 }
 
-// ── Render — AI Summary ──────────────────────
+
 function renderAI(text) {
   const el = document.getElementById('aiSummary');
   el.textContent = '';
@@ -282,7 +288,7 @@ function renderAI(text) {
   }, 20);
 }
 
-// ── Render — Forecast ────────────────────────
+
 const WEATHER_ICONS = {
   'sunny':         '☀️',
   'clear':         '🌙',
@@ -335,7 +341,7 @@ function renderForecast(days, u) {
   });
 }
 
-// ── Render — Hourly SVG Chart ────────────────
+
 function renderHourly(hours, u) {
   const svg = document.getElementById('hourlySvg');
   svg.innerHTML = '';
@@ -362,7 +368,7 @@ function renderHourly(hours, u) {
   const cx = i  => PX + (i / 23) * (W - PX * 2);
   const cy = t  => PT + (1 - (t - minT) / range) * (H - PT - PB);
 
-  // Gradient definition
+ 
   svg.innerHTML = `
     <defs>
       <linearGradient id="tempGrad" x1="0" y1="0" x2="0" y2="1">
@@ -372,7 +378,7 @@ function renderHourly(hours, u) {
     </defs>
   `;
 
-  // Area fill path
+  
   const linePts = pts.map((p, i) => `${i === 0 ? 'M' : 'L'}${cx(i)},${cy(p.t)}`).join(' ');
   const areaD   = `${linePts} L${cx(23)},${H} L${cx(0)},${H} Z`;
 
@@ -381,7 +387,7 @@ function renderHourly(hours, u) {
   area.setAttribute('fill', 'url(#tempGrad)');
   svg.appendChild(area);
 
-  // Line
+  
   const line = document.createElementNS('http://www.w3.org/2000/svg', 'path');
   line.setAttribute('d', linePts);
   line.setAttribute('fill', 'none');
@@ -391,11 +397,11 @@ function renderHourly(hours, u) {
   line.setAttribute('stroke-linecap', 'round');
   svg.appendChild(line);
 
-  // Dots + labels every 3 hours
+  
   pts.forEach((p, i) => {
     if (i % 3 !== 0) return;
 
-    // Dot
+   
     const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
     circle.setAttribute('cx', cx(i));
     circle.setAttribute('cy', cy(p.t));
@@ -404,7 +410,7 @@ function renderHourly(hours, u) {
     circle.setAttribute('opacity', '0.85');
     svg.appendChild(circle);
 
-    // Temp label
+   
     const tempLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
     tempLabel.setAttribute('x', cx(i));
     tempLabel.setAttribute('y', cy(p.t) - 8);
@@ -415,7 +421,7 @@ function renderHourly(hours, u) {
     tempLabel.textContent = Math.round(p.t) + '°';
     svg.appendChild(tempLabel);
 
-    // Hour label
+   
     const hourLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
     hourLabel.setAttribute('x', cx(i));
     hourLabel.setAttribute('y', H - 6);
@@ -428,7 +434,7 @@ function renderHourly(hours, u) {
   });
 }
 
-// ── Render — Details List ────────────────────
+
 function renderDetails(current, day0, u) {
   const astro   = day0?.astro || {};
   const sunrise = astro.sunrise   || '—';
@@ -470,7 +476,7 @@ function renderDetails(current, day0, u) {
     `).join('');
 }
 
-// ── State Helpers ────────────────────────────
+
 function showState(state) {
   ['stateEmpty', 'stateLoading', 'stateError', 'results'].forEach(id => {
     document.getElementById(id).classList.add('hidden');
